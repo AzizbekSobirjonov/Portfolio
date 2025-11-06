@@ -1,394 +1,454 @@
-:root {
-    --primary-gradient: linear-gradient(45deg, #00c6ff, #0072ff, #00c6ff);
-    --card-bg: rgba(10, 10, 10, 0.85);
-    --text-color: #fff;
-    --accent-color: #0072ff;
-    --shadow-color: rgba(0, 114, 255, 0.3);
-    --animation-timing: cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-
 body {
-    background-color: #000;
-    color: var(--text-color);
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 50px 0 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    overflow-x: hidden;
-    position: relative;
-    /* 3D effektlar uchun perspektivani faollashtirish */
-    perspective: 1000px; 
-}
-
-#backgroundCanvas {
-    position: fixed;
-    top: 0; left: 0; 
-    width: 100%; height: 100%;
-    z-index: -1; 
-    background: linear-gradient(125deg, #0a0a1a, #1a0a2a, #0a1a2a, #1a1a2a);
-    background-size: 400% 400%;
-    animation: gradientShift 20s ease infinite;
-    /* Yulduzlarni saqlash uchun */
-    transform-style: preserve-3d; 
-}
-
-/* --- YULDUZLAR (OPTIMAL box-shadow usuli) --- */
-#backgroundCanvas::before,
-#backgroundCanvas::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    /* Transformni optimallashtirish */
-    will-change: transform;
-}
-
-/* Kichik va uzoq yulduzlar */
-#backgroundCanvas::before {
-    /* Bu joyga JS orqali generatsiya qilingan taxminan 100-200 ta "x y #fff" qiymatlari kerak. 
-       Bu yerda namuna uchun bir nechtasi berildi. */
-    box-shadow: 
-        100px 100px #fff, 200px 300px #fff, -50px 500px #fff, 
-        750px 900px #fff, 1200px 400px #fff, 300px 100px #fff, 
-        900px 700px #fff, 400px 950px #fff, 600px 200px #fff, 
-        800px 500px #fff;
-    animation: starsMove 250s linear infinite;
-    transform: translateZ(-200px) scale(1.2); /* Orqaga surish */
-}
-
-/* Katta va yaqin yulduzlar/porlash */
-#backgroundCanvas::after {
-    /* Porlash effektlari */
-    box-shadow: 
-        150px 150px 2px 2px rgba(0, 198, 255, 0.5), 
-        500px 700px 3px 3px rgba(0, 114, 255, 0.4),
-        1000px 200px 1px 1px rgba(255, 255, 255, 0.6);
-    animation: starsMove 180s linear infinite reverse;
-    transform: translateZ(-100px) scale(1.1); /* Oldinroq joylashish */
-}
-/* --- YULDUZLAR tugadi --- */
+            background-color: #000;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 50px;
+        }
 
 
-.container { 
-    width: 100%; 
-    max-width: 600px; 
-    padding: 20px; 
-    z-index: 10; /* Kontent fon ustida turishi uchun */
-    animation: fadeIn 1.5s ease-out;
-    will-change: transform, opacity;
-}
+        #backgroundCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; 
+            background: linear-gradient(125deg, #0a0a1a, #1a0a2a, #0a1a2a, #1a1a2a);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
 
-.card {
-    background-color: var(--card-bg); 
-    border-radius: 15px; 
-    padding: 20px; 
-    margin-bottom: 25px; 
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: cardAppear 1s ease-out;
-    will-change: transform, box-shadow;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px var(--shadow-color);
-}
-
-.section-title { 
-    text-transform: uppercase; 
-    font-size: 1.2em; 
-    font-weight: bold; 
-    margin-bottom: 20px; 
-    padding-bottom: 10px; 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-    position: relative;
-    will-change: width;
-}
-
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 50px;
-    height: 2px;
-    background: var(--primary-gradient);
-    animation: lineExpand 3s infinite alternate;
-}
-
-.profile-info { text-align: center; }
-.profile-image-container { 
-    width: 120px; 
-    height: 120px; 
-    margin: 0 auto 20px; 
-    border-radius: 50%; 
-    overflow: hidden; 
-    border: 3px solid transparent;
-    background: var(--primary-gradient);
-    background-size: 200% 200%;
-    animation: borderPulse 3s infinite, gradientMove 4s infinite;
-    padding: 3px;
-    position: relative;
-    will-change: box-shadow, transform, background-position;
-}
-
-.profile-image { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    border-radius: 50%;
-    filter: grayscale(30%) contrast(1.1);
-    transition: all 0.5s var(--animation-timing);
-    will-change: filter, transform;
-}
-
-.profile-image:hover {
-    filter: grayscale(0%) contrast(1.2);
-    transform: scale(1.05);
-}
-
-h1 { 
-    margin: 0 0 10px; 
-    font-size: 2em; 
-    background: var(--primary-gradient);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: textShine 3s ease-in-out infinite;
-    text-shadow: 0 0 20px rgba(0, 198, 255, 0.3);
-    will-change: background-position;
-}
-
-.origin { 
-    color: #ccc; 
-    margin: 0 0 15px; 
-    font-size: 1em; 
-    font-style: italic;
-}
-
-.location {
-    margin: 15px 0;
-    font-size: 1em;
-    color: #aaa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.social-links { 
-    margin-top: 25px; 
-    display: flex; 
-    justify-content: center; 
-    gap: 15px; 
-    flex-wrap: wrap;
-}
-
-.social-btn { 
-    text-decoration: none; 
-    color: var(--text-color); 
-    padding: 10px 20px; 
-    border-radius: 25px; 
-    font-size: 0.9em; 
-    transition: all 0.4s var(--animation-timing);
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 120px;
-    justify-content: center;
-    will-change: transform, box-shadow, filter;
-}
-
-.social-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.6s;
-}
-
-.social-btn:hover::before {
-    left: 100%;
-}
-
-.social-btn:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-    filter: brightness(1.2);
-}
-
-.telegram { 
-    background: linear-gradient(45deg, #0088cc, #00aced);
-    box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
-}
-.instagram { 
-    background: linear-gradient(45deg, #E4405F, #FD1D1D);
-    box-shadow: 0 4px 15px rgba(228, 64, 95, 0.3);
-}
-.github { 
-    background: linear-gradient(45deg, #333, #555);
-    box-shadow: 0 4px 15px rgba(51, 51, 51, 0.3);
-}
-
-/* --- Skills bo'limi stillari --- */
-.skill-item {
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, rgba(26, 26, 26, 0.7), rgba(40, 40, 40, 0.7)); 
-    padding: 15px; 
-    border-radius: 12px;
-    transition: all 0.4s var(--animation-timing);
-    animation: skillSlide 0.6s ease-out forwards;
-    opacity: 0;
-    transform: translateX(-30px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    position: relative;
-    overflow: hidden;
-    will-change: transform, box-shadow, opacity;
-}
-
-/* ... qolgan skill-item stillari o'zgarishsiz qoldi ... */
-
-.skill-item:hover {
-    transform: translateX(10px) scale(1.02);
-    box-shadow: 0 8px 25px var(--shadow-color);
-    background: linear-gradient(135deg, rgba(35, 35, 35, 0.8), rgba(50, 50, 50, 0.8));
-}
-
-.skill-icon-name { display: flex; align-items: center; flex: 1; }
-
-.icon-placeholder {
-    width: 50px; 
-    height: 50px; 
-    border-radius: 10px;
-    margin-right: 20px; 
-    background-size: 70%; 
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: rgba(39, 39, 39, 0.8); 
-    transition: all 0.4s var(--animation-timing);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    position: relative;
-    overflow: hidden;
-    will-change: transform, box-shadow;
-}
-
-.skill-item:hover .icon-placeholder {
-    transform: scale(1.15) rotate(5deg);
-    box-shadow: 0 5px 20px rgba(0, 198, 255, 0.4);
-}
-
-/* ... qolgan skill-related stillar o'zgarishsiz qoldi ... */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
 
-/* Animatsiyalar */
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+        .container { 
+            width: 100%; 
+            max-width: 600px; 
+            padding: 20px; 
+            z-index: 1; 
+            animation: fadeIn 1.5s ease-out;
+        }
 
-/* Yulduzlarni kosmosda suzish animatsiyasi */
-@keyframes starsMove {
-    0% { transform: translateY(0) translateZ(var(--z-offset, 0)); }
-    100% { transform: translateY(-2000px) translateZ(var(--z-offset, 0)); }
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        .profile-card, .skills-section { 
+            background-color: rgba(10, 10, 10, 0.85); 
+            border-radius: 15px; 
+            padding: 20px; 
+            margin-bottom: 25px; 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: cardAppear 1s ease-out;
+        }
 
-@keyframes cardAppear {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
+        @keyframes cardAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
 
-@keyframes lineExpand {
-    0% { width: 50px; opacity: 0.7; }
-    50% { width: 150px; opacity: 1; }
-    100% { width: 50px; opacity: 0.7; }
-}
+        .profile-card:hover, .skills-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 114, 255, 0.3);
+        }
 
-@keyframes borderPulse {
-    0% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0.4); }
-    70% { box-shadow: 0 0 0 15px rgba(0, 198, 255, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0); }
-}
+        .section-title { 
+            text-transform: uppercase; 
+            font-size: 1.2em; 
+            font-weight: bold; 
+            margin-bottom: 20px; 
+            padding-bottom: 10px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            position: relative;
+        }
 
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(to right, #00c6ff, #0072ff, #00c6ff);
+            animation: lineExpand 3s infinite alternate;
+        }
 
-@keyframes textShine {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+        @keyframes lineExpand {
+            0% { width: 50px; opacity: 0.7; }
+            50% { width: 150px; opacity: 1; }
+            100% { width: 50px; opacity: 0.7; }
+        }
 
-@keyframes skillSlide {
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
+        .profile-info { text-align: center; }
+        .profile-image-container { 
+            width: 120px; 
+            height: 120px; 
+            margin: 0 auto 20px; 
+            border-radius: 50%; 
+            overflow: hidden; 
+            border: 3px solid transparent;
+            background: linear-gradient(45deg, #00c6ff, #0072ff, #00c6ff);
+            background-size: 200% 200%;
+            animation: borderPulse 3s infinite, gradientMove 4s infinite;
+            padding: 3px;
+            position: relative;
+        }
 
-@keyframes barShine {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-}
+        @keyframes borderPulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 198, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0); }
+        }
 
-/* ... qolgan float animatsiyasi o'zgarishsiz qoldi ... */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-/* Media so'rovlar (O'zgarishsiz) */
-@media (max-width: 768px) {
-    .container {
-        padding: 15px;
-    }
-    
-    .skill-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-    
-    .skill-bar-container {
-        width: 100%;
-        margin: 10px 0;
-    }
-    
-    .skill-percent {
-        align-self: flex-end;
-    }
-    
-    .social-links {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .profile-image-container {
-        width: 100px;
-        height: 100px;
-    }
-    
-    h1 {
-        font-size: 1.6em;
-    }
-}
+        .profile-image { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            border-radius: 50%;
+            filter: grayscale(30%) contrast(1.1);
+            transition: all 0.5s ease;
+        }
+
+        .profile-image:hover {
+            filter: grayscale(0%) contrast(1.2);
+            transform: scale(1.05);
+        }
+
+        h1 { 
+            margin: 0 0 10px; 
+            font-size: 2em; 
+            background: linear-gradient(45deg, #00c6ff, #0072ff, #00c6ff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 3s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(0, 198, 255, 0.3);
+        }
+
+        @keyframes textShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .origin { 
+            color: #ccc; 
+            margin: 0 0 15px; 
+            font-size: 1em; 
+            font-style: italic;
+        }
+
+        .location {
+            margin: 15px 0;
+            font-size: 1em;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-links { 
+            margin-top: 25px; 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            flex-wrap: wrap;
+        }
+
+        .social-btn { 
+            text-decoration: none; 
+            color: #fff; 
+            padding: 10px 20px; 
+            border-radius: 25px; 
+            font-size: 0.9em; 
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .social-btn:hover::before {
+            left: 100%;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            filter: brightness(1.2);
+        }
+
+        .telegram { 
+            background: linear-gradient(45deg, #0088cc, #00aced);
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+        }
+        .instagram { 
+            background: linear-gradient(45deg, #E4405F, #FD1D1D);
+            box-shadow: 0 4px 15px rgba(228, 64, 95, 0.3);
+        }
+        .github { 
+            background: linear-gradient(45deg, #333, #555);
+            box-shadow: 0 4px 15px rgba(51, 51, 51, 0.3);
+        }
+
+        /* --- Skills bo'limi stillari --- */
+        .skill-item {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.7), rgba(40, 40, 40, 0.7)); 
+            padding: 15px; 
+            border-radius: 12px;
+            transition: all 0.4s ease;
+            animation: skillSlide 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-30px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .skill-item:hover::before {
+            left: 100%;
+        }
+
+        @keyframes skillSlide {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .skill-item:nth-child(1) { animation-delay: 0.2s; }
+        .skill-item:nth-child(2) { animation-delay: 0.4s; }
+        .skill-item:nth-child(3) { animation-delay: 0.6s; }
+
+        .skill-item:hover {
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 114, 255, 0.2);
+            background: linear-gradient(135deg, rgba(35, 35, 35, 0.8), rgba(50, 50, 50, 0.8));
+        }
+
+        .skill-icon-name { display: flex; align-items: center; flex: 1; }
+
+        .icon-placeholder {
+            width: 50px; 
+            height: 50px; 
+            border-radius: 10px;
+            margin-right: 20px; 
+            background-size: 70%; 
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: rgba(39, 39, 39, 0.8); 
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-placeholder::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+        }
+
+        .skill-item:hover .icon-placeholder {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 5px 20px rgba(0, 198, 255, 0.4);
+        }
+
+        .skill-item:hover .icon-placeholder::after {
+            left: 100%;
+        }
+
+        .python { 
+            background-image: url('https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'); 
+        }
+        .css { 
+            background-image: url('https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg'); 
+        }
+        .html { 
+            background-image: url('https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg'); 
+        }
+
+        .skill-details { display: flex; flex-direction: column; }
+        .skill-name { 
+            font-weight: bold; 
+            font-size: 1.2em; 
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #fff, #ccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .skill-type { 
+            font-size: 0.75em; 
+            color: #888; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .skill-bar-container { 
+            width: 40%; 
+            height: 10px; 
+            background: rgba(51, 51, 51, 0.7); 
+            border-radius: 5px; 
+            overflow: hidden; 
+            margin: 0 15px; 
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .skill-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00c6ff, #0072ff, #00c6ff);
+            background-size: 200% 100%;
+            border-radius: 5px;
+            width: 0;
+            transition: width 2s cubic-bezier(0.22, 0.61, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+            animation: barShine 3s infinite linear;
+        }
+
+        @keyframes barShine {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .skill-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .skill-percent { 
+            font-weight: bold; 
+            width: 45px; 
+            text-align: right; 
+            opacity: 0;
+            transition: opacity 0.5s ease 1s, transform 0.3s ease;
+            font-size: 1.1em;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .skill-item:hover .skill-percent {
+            transform: scale(1.2);
+        }
+
+
+        .floating-element {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(0,198,255,0.1) 0%, rgba(0,114,255,0.05) 70%, transparent 100%);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, 100px) rotate(90deg); }
+            50% { transform: translate(200px, 0) rotate(180deg); }
+            75% { transform: translate(100px, -100px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .skill-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .skill-bar-container {
+                width: 100%;
+                margin: 10px 0;
+            }
+            
+            .skill-percent {
+                align-self: flex-end;
+            }
+            
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .profile-image-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            h1 {
+                font-size: 1.6em;
+            }
+        }           
