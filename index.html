@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobirjonov Azizbek</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <canvas id="backgroundCanvas"></canvas> 
+    <div class="floating-element" style="top: 10%; left: 5%; animation-delay: 0s;"></div>
+    <div class="floating-element" style="top: 60%; left: 80%; animation-delay: -5s;"></div>
+    <div class="floating-element" style="top: 30%; left: 70%; animation-delay: -10s;"></div>
+
+    <div class="container">
+
+        <section class="profile-card">
+            <div class="profile-info">
+                <div class="profile-image-container">
+                    <img src="icons/profile.png" alt="Profil rasmi" class="profile-image"> 
+                </div>
+                <h1>Sobirjonov Azizbek</h1>
+                <p class="origin">I am from Uzbekistan</p>
+                <div class="location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>🇺🇿 Uzbekistan, Tashkent</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://t.me/Sobirjonov_Azizbek_01" class="social-btn telegram" target="_blank">
+                        <i class="fab fa-telegram-plane"></i> 
+                        <span>Telegram</span>
+                    </a>
+                    <a href="https://www.instagram.com/uzcoder_01/" class="social-btn instagram" target="_blank">
+                        <i class="fab fa-instagram"></i> 
+                        <span>Instagram</span>
+                    </a>
+                    <a href="https://github.com/AzizbekSobirjonov" class="social-btn github" target="_blank">
+                        <i class="fab fa-github"></i> 
+                        <span>Github</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <section class="skills-section">
+            <h2 class="section-title">programming skills</h2>
+
+            <div class="skill-list">
+                <div class="skill-item">
+                    <div class="skill-icon-name">
+                        <div class="icon-placeholder python"></div> 
+                        <div class="skill-details">
+                            <span class="skill-name">Python</span>
+                            <span class="skill-type">Programming Language</span>
+                        </div>
+                    </div>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar" data-percent="70"></div>
+                    </div>
+                    <span class="skill-percent">70%</span>
+                </div>
+                
+                <div class="skill-item">
+                    <div class="skill-icon-name">
+                        <div class="icon-placeholder css"></div>
+                        <div class="skill-details">
+                            <span class="skill-name">CSS</span>
+                            <span class="skill-type">Stylesheet Language</span>
+                        </div>
+                    </div>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar" data-percent="65"></div>
+                    </div>
+                    <span class="skill-percent">65%</span>
+                </div>
+                
+                <div class="skill-item">
+                    <div class="skill-icon-name">
+                        <div class="icon-placeholder html"></div>
+                        <div class="skill-details">
+                            <span class="skill-name">HTML</span>
+                            <span class="skill-type">Markup Language</span>
+                        </div>
+                    </div>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar" data-percent="85"></div>
+                    </div>
+                    <span class="skill-percent">85%</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+    
+</body>
+</html>
