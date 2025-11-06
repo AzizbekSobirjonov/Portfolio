@@ -1,4 +1,4 @@
-        // Kengaytirilgan Particle System
+
         const canvas = document.getElementById('backgroundCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -36,7 +36,7 @@
                 this.y += this.speedY + Math.cos(this.angle) * this.wobble;
                 this.angle += this.wobbleSpeed;
 
-                // Chegaralarni tekshirish
+  
                 if (this.x > canvas.width + this.size) this.reset();
                 else if (this.x < -this.size) this.reset();
                 
@@ -50,7 +50,7 @@
                 ctx.fillStyle = this.color;
                 ctx.fill();
 
-                // Glow effect
+
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
                 ctx.fillStyle = this.color.replace(')', ', 0.1)').replace('rgba', 'rgba');
@@ -61,7 +61,7 @@
         const particles = [];
         const particlesCount = 150;
 
-        // Connection lines between particles
+
         function drawConnections() {
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i; j < particles.length; j++) {
@@ -89,8 +89,7 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            
-            // Background with fade effect
+
             ctx.fillStyle = 'rgba(10, 10, 20, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -100,19 +99,19 @@
                 particle.draw();
             });
 
-            // Draw connections
+
             drawConnections();
         }
 
         init();
         animate();
 
-        // Skill barlarni animatsiya qilish
+
         document.addEventListener('DOMContentLoaded', function() {
             const skillBars = document.querySelectorAll('.skill-bar');
             const skillPercents = document.querySelectorAll('.skill-percent');
             
-            // Intersection Observer for skill bars animation
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -134,7 +133,7 @@
 
             observer.observe(document.querySelector('.skills-section'));
             
-            // Hover effects enhancement
+
             const skillItems = document.querySelectorAll('.skill-item');
             skillItems.forEach(item => {
                 item.addEventListener('mouseenter', function() {
